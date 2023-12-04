@@ -8,6 +8,8 @@
         public string Psp { get; set; }
         public string Region { get; set; }
         public int TicketId { get; set; }
+        public int CategoryId { get; set; }
         public virtual Ticket Ticket { get; set; }
+        public virtual Category Cateogry { get; set; }
     }
 }

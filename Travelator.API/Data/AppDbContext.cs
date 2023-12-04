@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using Travelator.API.Entities;
 
 namespace Travelator.API.Data
@@ -35,6 +36,26 @@ namespace Travelator.API.Data
                 .HasOne(h => h.Ticket)
                 .WithMany()
                 .HasForeignKey(h => h.TicketId);
+            builder.Entity<Human>()
+                .HasOne(h => h.Cateogry)
+                .WithMany()
+                .HasForeignKey(h => h.CategoryId)
+                .IsRequired();
+            builder.Entity<Category>()
+                .HasKey(c => c.Id);
+            builder.Entity<Category>()
+                .Property(c => c.Name)
+                .HasMaxLength(50)
+                .IsRequired();
+            builder.Entity<Category>()
+                .HasData(
+                    new { Id = 1, Name = "Davrli reyslar" },
+                    new { Id = 2, Name = "Tarif reyslar" },
+                    new { Id = 3, Name = "Xalqaro reyslar" },
+                    new { Id = 4, Name = "Transiti reyslar" },
+                    new { Id = 5, Name = "Chaqqon reyslar" }
+                );
+
             builder.Entity<Ticket>()
                 .HasKey(t => t.Id);
             builder.Entity<Ticket>()
