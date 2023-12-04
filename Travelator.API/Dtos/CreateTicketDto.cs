@@ -3,8 +3,6 @@
     public class CreateTicketDto
     {
         public string Location { get; set; }
-
-
         public double Price { get; set; }
     }
 }
