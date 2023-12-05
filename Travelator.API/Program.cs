@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Travelator.API.Data;
+using Travelator.API.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(o
     => o.UseSqlServer(builder.Configuration.GetConnectionString("localhost")));
+
+builder.Services.AddScoped<IHumanService, HumanService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
