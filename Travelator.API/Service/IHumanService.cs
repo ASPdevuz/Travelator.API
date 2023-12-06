@@ -8,7 +8,7 @@ namespace Travelator.API.Service
         Task<List<Human>> GetHumans();
         Task<Human> GetHuman(Guid id);
         Task<Human> CreateHuman(CraeteHumanDto newHuman);
-        Task<Human> UpdateHuman(UpdateHumanDto human);
+        Task<Human> UpdateHuman(Guid id, UpdateHumanDto human);
         Task<bool> DeleteHuman(Guid id);
     }
 }

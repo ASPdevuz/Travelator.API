@@ -1,4 +1,5 @@
-﻿using Travelator.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Travelator.API.Data;
 using Travelator.API.Dtos;
 using Travelator.API.Entities;
 
@@ -10,29 +11,70 @@ namespace Travelator.API.Service
 
         public HumanService(AppDbContext dbContext)
             => this.dbContext = dbContext; 
-        public Task<Human> CreateHuman(CraeteHumanDto newHuman)
+        public async Task<Human> CreateHuman(CraeteHumanDto newHuman)
         {
-            throw new NotImplementedException();
+            var created = new Human
+            {
+                Id = Guid.NewGuid(),
+                Fullname = newHuman.Fullname,
+                Age = newHuman.Age,
+                Psp = newHuman.Psp,
+                Region = newHuman.Region,
+                TicketId = newHuman.TicketId,
+                CategoryId = newHuman.CategoryId
+            };
+
+            await dbContext.Humans.AddAsync(created);
+            await dbContext.SaveChangesAsync();
+
+            return created;
         }
 
-        public Task<bool> DeleteHuman(Guid id)
+        public async Task<bool> DeleteHuman(Guid id)
         {
-            throw new NotImplementedException();
+            var human = await dbContext.Humans
+                .FirstOrDefaultAsync(h => h.Id == id);
+
+            if (human is null)
+                return false;
+
+            dbContext.Humans.Remove(human);
+            await dbContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<Human> GetHuman(Guid id)
+        public async Task<Human> GetHuman(Guid id)
         {
-            throw new NotImplementedException();
+            var human = await dbContext.Humans
+                .FirstOrDefaultAsync(h => h.Id == id);
+
+            if (human is null)
+                return null;
+
+            return human;
         }
 
-        public Task<List<Human>> GetHumans()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<List<Human>> GetHumans()
+            => await dbContext.Humans.ToListAsync();
 
-        public Task<Human> UpdateHuman(UpdateHumanDto human)
+        public async Task<Human> UpdateHuman(Guid id, UpdateHumanDto human)
         {
-            throw new NotImplementedException();
+            var updated = await dbContext.Humans
+                .FirstOrDefaultAsync(h => h.Id == id);
+
+            if (updated is null)
+                return null;
+
+            updated.Fullname = human.Fullname;
+            updated.Psp = human.Psp;
+            updated.Age = human.Age;
+            updated.Region = human.Region;
+            updated.TicketId = human.TicketId;
+            updated.CategoryId = human.CategoryId;
+
+            await dbContext.SaveChangesAsync();
+            return updated;
         }
     }
 }
